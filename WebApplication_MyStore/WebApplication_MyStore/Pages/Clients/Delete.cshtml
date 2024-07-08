@@ -1,0 +1,28 @@
+﻿@page
+@using System.Data.SqlClient;
+
+@{
+    string id = Request.Query["id"];
+
+    try
+    {
+        string connectionString = "Data Source=.\\sqlexpress;Initial Catalog=RestSample;Integrated Security=True";
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            string sql = "DELETE FROM clients WHERE id = @id";
+
+            using (SqlCommand command = new SqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        // ในที่นี้คุณสามารถเพิ่มการจัดการข้อผิดพลาดได้ตามต้องการ
+    }
+
+    Response.Redirect("/Clients/Index");
+}
